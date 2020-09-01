@@ -1,0 +1,238 @@
+name: "Disposable Temperature Sensing Device"
+manufacturer: "KETI"
+model: "Disposable Temperature Sensing Device v1.0"
+labels:
+- "disposable-sensing-temperature-device"
+description: "Disposable device for sensing temperature of refrigirator"
+
+deviceResources:
+-
+  name: "atemp"
+  description: "Average Temperature (℃) sent from disposable device"
+  properties:
+    value:
+      { type: "Atring", readWrite: "R", defaultValue: "0" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "℃" }
+
+-
+  name: "oprd"
+  description: "Observing period (seconds)"
+  properties:
+    value:
+      {type: "String", readWrite: "RW", defaultValue: "5" } 
+
+-
+  name: "sprd"
+  description: "Sensing period (seconds)"
+  properties:
+    value:
+      {type: "String", readWrite: "RW", defaultValue: "5" }
+-
+  name: "maop"
+  description: "Maximum observing period (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "3600" }
+
+-
+  name: "miop"
+  description: "Minimum observing period (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "0" }
+
+-
+  name: "masp"
+  description: "Maximum sensing period (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "3600" }
+
+-
+  name: "misp"
+  description: "Minimum sensing period (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "0" }
+
+-
+  name: "mast"
+  description: "Maximum sensing time (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "3600" }
+
+-
+  name: "mist"
+  description: "Minimum sensing time (seconds)"
+  properties:
+    value:
+      {type: "Int32", readWrite: "R", defaultValue: "0" }
+
+-
+  name: "mis"
+  description: "Microservice IDs"
+  properties:
+    value:
+      {type: "Uint32array", readWrite: "RW", defaultValue: ""}
+
+-
+  name: "mistocreate"
+  description: "Microservice ID"
+  properties:
+    value:
+      {type: "Uint32array", readWrite: "W", defaultValue: ""}
+
+-
+  name: "mistorun"
+  description: "Microservice ID"
+  properties:
+    value:
+      {type: "Uint32array", readWrite: "W", defaultValue: ""}
+
+-
+  name: "mistostop"
+  description: "Microservice ID"
+  properties:
+    value:
+      {type: "Uint32array", readWrite: "W", defaultValue: ""}
+
+-
+  name: "mitoset"
+  description: "Task ID"
+  properties:
+    value:
+      {type: "String", readWrite: "RW", defaultValue: ""}
+
+-
+  name: "titoset"
+  description: "Task ID"
+  properties:
+    value:
+      {type: "String", readWrite: "RW", defaultValue: ""}
+
+deviceCommands:
+-
+  name: "TaskParameter"
+  set:
+    - {operation: "set", deviceResource: "oprd"}
+    - {operation: "set", deviceResource: "sprd"}
+    - {operation: "set", deviceResource: "mitoset"}
+    - {operation: "set", deviceResource: "titoset"}
+  get:
+    - {operation: "get", deviceResource: "oprd"}
+    - {operation: "get", deviceResource: "sprd"}
+    - {operation: "get", deviceResource: "maop"}
+    - {operation: "get", deviceResource: "miop"}
+    - {operation: "get", deviceResource: "masp"}
+    - {operation: "get", deviceResource: "misp"}
+    - {operation: "get", deviceResource: "mast"}
+    - {operation: "get", deviceResource: "mist"}
+
+-
+  name: "MicroserviceID"
+  set:
+    - {operation: "set", deviceResource: "mis"}
+  get:
+    - {operation: "get", deviceResource: "mis"}
+
+-
+  name: "MicroserviceCreation"
+  set:
+    - {operation: "set", deviceResource: "mistocreate"}
+
+-
+  name: "MicroserviceRun"
+  set:
+    - {operation: "set", deviceResource: "mistorun"}
+
+-
+  name: "MicroserviceStop"
+  set:
+    - {operation: "set", deviceResource: "mistostop"}
+coreCommands:
+-
+  name: "TaskParameter"
+  get:
+    path: "/api/v1/device/{deviceId}/TaskParameter"
+    responses:
+    -
+      code: "200"
+      description: ""
+      expectedvalues: ["oprd","sprd","maop","miop","masp","misp","mast","mist"]
+    -
+      code: "503"
+      description: "service unavailable"
+  put:
+    path: "/api/v1/device/{deviceId}/TaskParameter"
+    parameterNames: ["oprd","sprd","mitoset","titoset"]
+    responses:
+    -
+      code: "200"
+      description: ""
+    -
+      code: "503"
+      description: "service unavailable"
+
+-
+  name: "MicroserviceID"
+  put:
+    path: "/api/v1/device/{deviceId}/MicroserviceID"
+    parameterNames: ["mis"]
+    responses:
+    -
+      code: "200"
+      description: ""
+    -
+      code: "503"
+      description: "service unavailable"
+  get:
+    path: "/api/v1/device/{deviceId}/MicroserviceID"
+    responses:
+    -
+      code: "200"
+      description: ""
+      expectedvalues: ["mis"]
+    -
+      code: "503"
+      description: "service unavailable"
+
+-
+  name: "MicroserviceCreation"
+  put:
+    path: "/api/v1/device/{deviceId}/MicroserviceCreation"
+    parameterNames: ["mistocreate"]
+    responses:
+    -
+      code: "200"
+      description: ""
+    -
+      code: "503"
+      description: "service unavailable"
+
+-
+  name: "MicroserviceRun"
+  put:
+    path: "/api/v1/device/{deviceId}/MicroserviceRun"
+    parameterNames: ["mistorun"]
+    responses:
+    -
+      code: "200"
+      description: ""
+    -
+      code: "503"
+      description: "service unavailable"
+
+-
+  name: "MicroserviceStop"
+  put:
+    path: "/api/v1/device/{deviceId}/MicroserviceStop"
+    parameterNames: ["mistostop"]
+    responses:
+    -
+      code: "200"
+      description: ""
+    -
+      code: "503"
+      description: "service unavailable"
